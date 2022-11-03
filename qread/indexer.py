@@ -1,6 +1,6 @@
 import os
-from config import URL_FOLDERS
-from config import COUNTER
+from qread.config import URL_FOLDERS
+
 
 class Indexer:
     """Собирает информацию по именам папок,
@@ -8,7 +8,6 @@ class Indexer:
     files = []
     folders = []
     img = []
-
 
     def index_folder(self):
         # Сохраняет названия папок пользователей которые загружали фотографии,
@@ -36,7 +35,6 @@ class Indexer:
                             self.files.remove(de)
                     else:
                         continue
-
                 except:
                     print("Error find images: code 2")
             for url in imgs:
@@ -45,14 +43,20 @@ class Indexer:
             print("Error find images: code 1")
         return self.img
 
-    def get_url_folder_user(self, user):
+    def get_url_folder_user(self, user, callback):
+        try:
+            if f'{user}_img' in self.img \
+                    or os.path.exists(str(user) + "_img"):
+                os.rmdir(f'{user}_img')
+            else:
+                try:
+                    return callback
+                except:
+                    print('Tyt')
+        except:
+            print(os.getcwd())
+            print("Ошибочка вышла")
 
-    def delete_foldes(self):
-        if COUNTER:
-            self.folders.clear()
-            self.files.clear()
-            self.img.clear()
- #       if len(self.img) != 0:
-#            os.rmdir
 
-
+    def information_on_delete(self):
+        print(self.url_img_of_folder())

@@ -4,10 +4,7 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 
-from qread.indexer import Indexer
 from qread.main import run_qr
-from qread.qread import Qread
-
 
 app = FastAPI()
 
@@ -26,30 +23,28 @@ app.add_middleware(
 
 
 @app.post("/api/download/")
-async def set_files(id_user: int = 1, files: List[UploadFile] = File(...)):
-        os.chdir("application")
-        if os.path.exists(str(id_user)+"_img"):
-            os.chdir(str(id_user)+"_img")
+async def set_files(id_user: int = 2, files: List[UploadFile] = File(...)):
+    os.chdir("application")
+    if os.path.exists(str(id_user) + "_img"):
+        os.chdir(str(id_user) + "_img")
+        for img in files:
+            with open(f"{img.filename}", "wb") as buffer:
+                shutil.copyfileobj(img.file, buffer)
+                os.chdir("../../")
+                return {'QR': run_qr(id_user)}
+    else:
+        try:
+            os.mkdir(str(id_user) + "_img")
+            os.chdir(str(id_user) + "_img")
             for img in files:
                 with open(f"{img.filename}", "wb") as buffer:
                     shutil.copyfileobj(img.file, buffer)
                     os.chdir("../../")
-                    run_qr()
-                    return {'QR': run_qr()}
-        else:
-            try:
-                os.mkdir(str(id_user) + "_img")
-                os.chdir(str(id_user) + "_img")
-                for img in files:
-                    with open(f"{img.filename}", "wb") as buffer:
-                        shutil.copyfileobj(img.file, buffer)
-                        run_qr()
-                        os.chdir("../../")
-                        return {'QR': run_qr()}
-            except:
-                print(os.getcwd())
+                    return {'QR': run_qr(id_user)}
+        except:
+            print(os.getcwd())
 
 
 @app.get("/api/getdata/")
 async def get_files():
-    return {'hello' : "hello"}
+    return {'hello': "hello"}

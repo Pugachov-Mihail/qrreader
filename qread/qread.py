@@ -1,32 +1,40 @@
 import os
-import cv2
+import shutil
 from PIL import Image
 from pyzbar.pyzbar import decode
-from config import COUNTER
+from .config import COUNTER
 
 
 class Qread:
-    def decode_img(self, files):
+    qr = ''
+
+    def decode_img(self, files, user):
         global COUNTER
         try:
             decoded_obj = decode(Image.open(files))
             l = len(decoded_obj)
             if l > 0:
                 for obj in decoded_obj:
+                    self.qr = obj.data.decode('utf-8')
                     COUNTER = True
-                    return obj.data.decode('utf-8')
+                return self.qr
             else:
-                return "Штрихкод не прочитался"
+                COUNTER = True
+                self.decode_img(files, user)
+                return "Штрихкод не прочитался. " \
+                       "Загрузи новое фото"
         except:
-            return "Ошибка чтения штрихкода"
+            return "Ошибка в чтении штрихкода"
 
-
-
+    def delete_foldes(self, user):
+        print(COUNTER)
+        if COUNTER:
+            try:
+                os.chdir("application")
+                print(os.getcwd())
+                shutil.rmtree(f"{user}_img", ignore_errors=True)
+                os.chdir("../")
+            except:
+                print(os.getcwd())
 
 # decode_obj.data.decode('utf-8')
-
-
-
-
-
-
