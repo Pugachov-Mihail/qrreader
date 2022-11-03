@@ -1,13 +1,32 @@
 import os
-from fastapi import FastAPI, UploadFile, File
-from typing import List
 import shutil
+from fastapi import FastAPI, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
+from typing import List
+
+from qread.indexer import Indexer
+from qread.main import run_qr
+from qread.qread import Qread
+
 
 app = FastAPI()
 
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.post("/api/download/")
-async def set_files(id_user: int, files: List[UploadFile] = File(...)):
+async def set_files(id_user: int = 1, files: List[UploadFile] = File(...)):
         os.chdir("application")
         if os.path.exists(str(id_user)+"_img"):
             os.chdir(str(id_user)+"_img")
@@ -15,15 +34,20 @@ async def set_files(id_user: int, files: List[UploadFile] = File(...)):
                 with open(f"{img.filename}", "wb") as buffer:
                     shutil.copyfileobj(img.file, buffer)
                     os.chdir("../../")
-                    return {'file_name': "ok"}
+                    run_qr()
+                    return {'QR': run_qr()}
         else:
-            os.mkdir(str(id_user)+"_img")
-            os.chdir(str(id_user)+"_img")
-            for img in files:
-                with open(f"{img.filename}", "wb") as buffer:
-                    shutil.copyfileobj(img.file, buffer)
-                    os.chdir("../../")
-                    return {'file_name': "ok"}
+            try:
+                os.mkdir(str(id_user) + "_img")
+                os.chdir(str(id_user) + "_img")
+                for img in files:
+                    with open(f"{img.filename}", "wb") as buffer:
+                        shutil.copyfileobj(img.file, buffer)
+                        run_qr()
+                        os.chdir("../../")
+                        return {'QR': run_qr()}
+            except:
+                print(os.getcwd())
 
 
 @app.get("/api/getdata/")
