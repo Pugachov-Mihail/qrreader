@@ -5,7 +5,8 @@ index = Indexer()
 qr = Qread()
 
 
-def run_qr(user):
+def run_qr(file,user):
     for img in index.url_img_of_folder():
         message = index.get_url_folder_user(user, qr.decode_img(img, user))
+        print(file)
         return message

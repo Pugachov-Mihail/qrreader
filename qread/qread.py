@@ -17,10 +17,11 @@ class Qread:
                 for obj in decoded_obj:
                     self.qr = obj.data.decode('utf-8')
                     COUNTER = True
+                    self.delete_foldes(user)
                 return self.qr
             else:
                 COUNTER = True
-                self.decode_img(files, user)
+                self.delete_foldes(user)
                 return "Штрихкод не прочитался. " \
                        "Загрузи новое фото"
         except:

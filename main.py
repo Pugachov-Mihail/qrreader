@@ -31,7 +31,7 @@ async def set_files(id_user: int = 2, files: List[UploadFile] = File(...)):
             with open(f"{img.filename}", "wb") as buffer:
                 shutil.copyfileobj(img.file, buffer)
                 os.chdir("../../")
-                return {'QR': run_qr(id_user)}
+                return {'QR': run_qr(img.filename, id_user)}
     else:
         try:
             os.mkdir(str(id_user) + "_img")
@@ -40,7 +40,7 @@ async def set_files(id_user: int = 2, files: List[UploadFile] = File(...)):
                 with open(f"{img.filename}", "wb") as buffer:
                     shutil.copyfileobj(img.file, buffer)
                     os.chdir("../../")
-                    return {'QR': run_qr(id_user)}
+                    return {'QR': run_qr(img.filename, id_user)}
         except:
             print(os.getcwd())
 
