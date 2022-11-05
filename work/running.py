@@ -1,5 +1,5 @@
-from .qread import Qread
-from .indexer import Indexer
+from work.qread import Qread
+from work.indexer import Indexer
 
 index = Indexer()
 qr = Qread()

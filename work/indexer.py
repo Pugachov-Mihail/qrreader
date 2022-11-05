@@ -55,5 +55,5 @@ class Indexer:
             return qr_message
         if os.path.exists(str(user) + "_img"):
             shutil.rmtree(str(user) + "_img", ignore_errors=True)
-            os.chdir("../")
+            os.chdir("/")
         return qr_message

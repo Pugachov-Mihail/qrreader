@@ -4,9 +4,7 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 
-from qread.config import COUNTER
-from qread.main import run_qr
-
+from work.running import run_qr
 
 app = FastAPI()
 
