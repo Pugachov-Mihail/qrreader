@@ -3,4 +3,6 @@ WORKDIR /code
 COPY . .
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-CMD ["uvicorn", "work.main:app", "--host", "0.0.0.0", "--port", "80"]
+RUN apt-get update
+RUN apt-get install -y build-essential libzbar-dev
+CMD ["uvicorn", "work.main:app", "--host", "127.0.0.1", "--port", "8000"]

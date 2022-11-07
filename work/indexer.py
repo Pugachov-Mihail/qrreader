@@ -1,6 +1,6 @@
 import os
 import shutil
-from qread.config import URL_FOLDERS, COUNTER
+from work.config import URL_FOLDERS, COUNTER
 
 
 class Indexer:
