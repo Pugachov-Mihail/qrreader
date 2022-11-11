@@ -24,13 +24,13 @@ app.add_middleware(
 
 @app.post("/api/download/")
 async def set_files(id_user: int, files: List[UploadFile] = File(...)):
-    os.chdir("application")
+    os.chdir("work/application")
     if os.path.exists(str(id_user) + "_img"):
         os.chdir(str(id_user) + "_img")
         for img in files:
             with open(f"{img.filename}", "wb") as buffer:
                 shutil.copyfileobj(img.file, buffer)
-                os.chdir("../../")
+                os.chdir("../")
                 return {'QR': run_qr(id_user)}
     else:
         try:
@@ -39,7 +39,7 @@ async def set_files(id_user: int, files: List[UploadFile] = File(...)):
             for img in files:
                 with open(f"{img.filename}", "wb") as buffer:
                     shutil.copyfileobj(img.file, buffer)
-                    os.chdir("../../")
+                    os.chdir("../")
                     return {'QR': run_qr(id_user)}
         except:
             print(os.getcwd())
