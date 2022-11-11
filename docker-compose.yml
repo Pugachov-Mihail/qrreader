@@ -1,0 +1,7 @@
+version: "3"
+services:
+  server:
+    build: .
+    command: uvicorn work.main:app --host
+    ports:
+      - 8008:8000
