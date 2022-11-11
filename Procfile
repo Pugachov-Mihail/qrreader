@@ -1,0 +1,1 @@
+web: gunicon -w 4 -k unicorn.workers.UvicornWorker main:app
